@@ -1,0 +1,1003 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans);}
+.app{display:flex;height:700px;background:var(--color-background-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+.sidebar{width:195px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;flex-shrink:0;}
+.sb-hd{padding:12px 13px 10px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.sb-logo{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.sb-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+.sb-sec{font-size:10px;font-weight:500;color:var(--color-text-secondary);padding:9px 12px 3px;letter-spacing:.04em;}
+.ni{display:flex;align-items:center;gap:7px;padding:7px 12px;cursor:pointer;font-size:12px;color:var(--color-text-secondary);transition:background .12s;}
+.ni:hover{background:var(--color-background-secondary);}
+.ni.active{background:#E6F1FB;color:#185FA5;font-weight:500;}
+.ni-icon{font-size:13px;width:16px;text-align:center;}
+.nb{margin-left:auto;font-size:9px;border-radius:20px;padding:1px 6px;font-weight:500;}
+.nb-w{background:#FAEEDA;color:#854F0B;}
+.nb-n{background:#EAF3DE;color:#3B6D11;}
+.nb-r{background:#FCEBEB;color:#A32D2D;}
+.sb-div{height:0.5px;background:var(--color-border-tertiary);margin:5px 0;}
+.sb-foot{padding:8px 12px;border-top:0.5px solid var(--color-border-tertiary);margin-top:auto;}
+.sf-row{display:flex;justify-content:space-between;padding:2px 0;}
+.sf-lbl{font-size:10px;color:var(--color-text-secondary);}
+.sf-val{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.sf-val.red{color:#A32D2D;}
+.sf-val.green{color:#3B6D11;}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.topbar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:9px 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tb-l .tb-title{font-size:13px;font-weight:500;color:var(--color-text-primary);}
+.tb-l .tb-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+.tb-r{display:flex;align-items:center;gap:8px;}
+.ai-pill{display:flex;align-items:center;gap:5px;font-size:10px;padding:4px 9px;border-radius:20px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#888780;flex-shrink:0;}
+.ai-dot.on{background:#3B6D11;animation:blink 1s infinite;}
+.ai-dot.call{background:#A32D2D;animation:blink .7s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.add-btn{background:#185FA5;color:#fff;border:none;border-radius:var(--border-radius-md);padding:5px 11px;font-size:11px;cursor:pointer;font-weight:500;}
+.content{flex:1;overflow-y:auto;padding:12px 13px;}
+.view{display:none;}.view.active{display:block;}
+
+/* ダッシュボード */
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px;}
+.stat{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 10px;}
+.stat-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:2px;}
+.stat-val{font-size:19px;font-weight:500;}
+.stat-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+.sv-b{color:#185FA5;}.sv-g{color:#3B6D11;}.sv-a{color:#854F0B;}.sv-r{color:#A32D2D;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.panel{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
+.ph{padding:8px 11px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;font-weight:500;color:var(--color-text-secondary);display:flex;align-items:center;justify-content:space-between;}
+.ph-link{font-size:10px;color:#185FA5;cursor:pointer;}
+.pb{padding:7px;max-height:380px;overflow-y:auto;}
+.oc{padding:7px 9px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);margin-bottom:4px;cursor:pointer;background:var(--color-background-primary);transition:border-color .12s;}
+.oc:hover{border-color:#185FA5;}
+.oc-row{display:flex;align-items:center;justify-content:space-between;}
+.oc-id{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.oc-dest{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+.oc-meta{font-size:9px;color:var(--color-text-secondary);margin-top:2px;display:flex;gap:7px;}
+.badge{font-size:9px;padding:1px 6px;border-radius:20px;font-weight:500;}
+.b-waiting{background:#FAEEDA;color:#854F0B;}
+.b-assigned{background:#E6F1FB;color:#185FA5;}
+.b-transit{background:#EAF3DE;color:#3B6D11;}
+.b-done{background:#D3D1C7;color:#5F5E5A;}
+.b-tel{background:#E6F1FB;color:#185FA5;}
+.b-fax{background:#FAEEDA;color:#854F0B;}
+.b-mail{background:#EAF3DE;color:#3B6D11;}
+.b-ai{background:#EEEDFE;color:#3C3489;}
+
+/* 案件受付 チャネルタブ */
+.chtabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:10px;background:var(--color-background-primary);border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0;overflow:hidden;}
+.chtab{flex:1;padding:9px 6px;text-align:center;font-size:11px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;background:var(--color-background-secondary);transition:all .15s;}
+.chtab:hover{color:var(--color-text-primary);}
+.chtab.active{color:#185FA5;font-weight:500;border-bottom-color:#185FA5;background:var(--color-background-primary);}
+.chbody{display:none;}.chbody.active{display:block;}
+.sc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:11px 13px;margin-bottom:9px;}
+.sc-ttl{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:6px 9px;}
+.fg.full{grid-template-columns:1fr;}
+.fr{display:flex;flex-direction:column;gap:2px;}
+.fl{font-size:10px;color:var(--color-text-secondary);}
+.req{color:#A32D2D;font-size:9px;margin-left:2px;}
+.fi,.fta{padding:6px 8px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:11px;background:var(--color-background-primary);color:var(--color-text-primary);width:100%;}
+.fta{resize:vertical;min-height:48px;line-height:1.5;}
+.fi:focus,.fta:focus{outline:none;border-color:#185FA5;}
+.fi.filled{border-color:#639922;}
+.sub-row{display:flex;gap:6px;justify-content:flex-end;margin-top:6px;}
+.btn-c{background:none;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:5px 11px;font-size:11px;cursor:pointer;color:var(--color-text-secondary);}
+.btn-s{background:#185FA5;border:none;border-radius:var(--border-radius-md);padding:5px 14px;font-size:11px;font-weight:500;cursor:pointer;color:#fff;}
+.btn-s:hover{background:#0C447C;}
+.upz{border:1px dashed var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:14px;text-align:center;cursor:pointer;background:var(--color-background-secondary);transition:border-color .15s;}
+.upz:hover{border-color:#185FA5;}
+.upz p{font-size:11px;color:var(--color-text-secondary);}
+.ai-btn{width:100%;padding:7px;border-radius:var(--border-radius-md);border:none;font-size:11px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;margin-top:7px;}
+.ai-r{background:#185FA5;color:#fff;}.ai-r:hover{background:#0C447C;}
+.ai-off{background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:default;}
+.lbar{height:3px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden;margin-top:4px;}
+.lfill{height:100%;background:#185FA5;border-radius:2px;transition:width .3s;}
+.ai-ok{background:#EAF3DE;border:0.5px solid #C0DD97;border-radius:var(--border-radius-md);padding:7px 10px;margin-top:6px;font-size:11px;color:#3B6D11;font-weight:500;}
+
+/* 録音UI */
+.rec-steps{display:flex;align-items:center;gap:0;margin-bottom:9px;}
+.rstep{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--color-text-secondary);}
+.rstep.act{color:#185FA5;font-weight:500;}.rstep.dn{color:#3B6D11;}
+.rsnum{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;flex-shrink:0;}
+.rstep.act .rsnum{border-color:#185FA5;background:#E6F1FB;color:#185FA5;}
+.rstep.dn .rsnum{border-color:#639922;background:#EAF3DE;color:#3B6D11;}
+.sarr{margin:0 5px;color:var(--color-border-tertiary);font-size:10px;}
+.rec-main{display:flex;flex-direction:column;align-items:center;padding:4px 0;}
+.rtimer{font-size:26px;font-weight:500;color:var(--color-text-primary);letter-spacing:2px;}
+.rtimer.rec{color:#A32D2D;}
+.waveform{display:flex;align-items:center;gap:2px;height:22px;margin:6px 0;}
+.wb{width:3px;border-radius:2px;background:var(--color-border-tertiary);transition:height .09s;}
+.wb.act{background:#185FA5;}
+.rec-ctrls{display:flex;gap:6px;margin-top:5px;}
+.rbtn{display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--border-radius-md);border:none;font-size:11px;font-weight:500;cursor:pointer;}
+.rbtn.rs{background:#A32D2D;color:#fff;}
+.rbtn.rp,.rbtn.re{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);}
+.rbtn:disabled{opacity:.4;cursor:default;}
+.txbox{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px;font-size:11px;color:var(--color-text-primary);line-height:1.6;min-height:50px;max-height:90px;overflow-y:auto;white-space:pre-wrap;}
+.sum-box{background:#E6F1FB;border:0.5px solid #B5D4F4;border-radius:var(--border-radius-md);padding:8px 10px;font-size:11px;color:var(--color-text-primary);line-height:1.6;}
+
+/* AI電話エージェント */
+.ai-agent-grid{display:grid;grid-template-columns:220px 1fr;height:100%;min-height:550px;gap:0;}
+.ag-left{border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:flex;flex-direction:column;overflow:hidden;}
+.ag-lh{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.ag-lh-t{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.ag-lh-s{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+.ag-status{margin:8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px;}
+.asr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.asr:last-child{margin-bottom:0;}
+.asl{font-size:10px;color:var(--color-text-secondary);}
+.asv{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.sc-list{padding:4px 8px;flex:1;overflow-y:auto;}
+.scbtn{width:100%;text-align:left;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 9px;margin-bottom:4px;cursor:pointer;transition:all .15s;}
+.scbtn:hover{border-color:#185FA5;background:#E6F1FB;}
+.scbtn.active{border-color:#185FA5;background:#E6F1FB;}
+.sct{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.scs{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+.sctag{font-size:9px;padding:1px 5px;border-radius:20px;margin-top:3px;display:inline-block;font-weight:500;}
+.tg-auto{background:#EAF3DE;color:#3B6D11;}
+.tg-tr{background:#FAEEDA;color:#854F0B;}
+.tg-oc{background:#EEEDFE;color:#3C3489;}
+.ag-queue{border-top:0.5px solid var(--color-border-tertiary);padding:7px 8px;}
+.qitem{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:var(--border-radius-md);margin-bottom:2px;background:var(--color-background-secondary);}
+.qi-ic{font-size:12px;width:14px;text-align:center;}
+.qi-nm{font-size:10px;color:var(--color-text-primary);flex:1;}
+.qi-bd{font-size:9px;padding:1px 5px;border-radius:20px;font-weight:500;}
+.qb-w{background:#FAEEDA;color:#854F0B;}
+.qb-p{background:#E6F1FB;color:#185FA5;}
+.qb-d{background:#EAF3DE;color:#3B6D11;}
+.ag-right{display:flex;flex-direction:column;overflow:hidden;}
+.ag-rh{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.ag-rh-t{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.ag-timer{font-size:11px;color:var(--color-text-secondary);font-variant-numeric:tabular-nums;}
+.ag-timer.rec{color:#A32D2D;}
+.ag-mid{flex:1;display:flex;overflow:hidden;}
+.call-col{width:240px;flex-shrink:0;border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow:hidden;}
+.caller-hd{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);flex-shrink:0;}
+.c-avatar{width:36px;height:36px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:#185FA5;margin-bottom:7px;}
+.c-name{font-size:12px;font-weight:500;color:var(--color-text-primary);}
+.c-tel{font-size:10px;color:var(--color-text-secondary);margin-top:2px;}
+.c-type{font-size:10px;margin-top:4px;}
+.wave-area{padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);flex-shrink:0;}
+.wl{font-size:9px;color:var(--color-text-secondary);margin-bottom:4px;}
+.wf{display:flex;align-items:center;gap:2px;height:20px;}
+.wwb{width:3px;border-radius:2px;transition:height .09s;}
+.wwb.aiw{background:#185FA5;}
+.wwb.clw{background:#888780;}
+.conv-log{flex:1;overflow-y:auto;padding:9px 12px;display:flex;flex-direction:column;gap:5px;}
+.msg{max-width:92%;padding:6px 9px;border-radius:var(--border-radius-md);font-size:11px;line-height:1.5;}
+.msg.ai{background:#E6F1FB;color:#0C447C;align-self:flex-start;border:0.5px solid #B5D4F4;}
+.msg.caller{background:var(--color-background-secondary);color:var(--color-text-primary);align-self:flex-end;border:0.5px solid var(--color-border-tertiary);}
+.mw{font-size:9px;font-weight:500;margin-bottom:2px;opacity:.7;}
+.msg.ai .mw{color:#185FA5;}
+.msg.caller .mw{color:var(--color-text-secondary);}
+.info-col{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.itabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);flex-shrink:0;background:var(--color-background-primary);}
+.itab{padding:7px 11px;font-size:10px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.itab.active{color:#185FA5;font-weight:500;border-bottom-color:#185FA5;}
+.itc{display:none;}.itc.active{display:block;}
+.itab-content{flex:1;overflow-y:auto;padding:10px 12px;}
+.ext-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.ei{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 9px;}
+.el{font-size:9px;color:var(--color-text-secondary);margin-bottom:2px;font-weight:500;}
+.ev{font-size:11px;color:var(--color-text-primary);}
+.ev.em{color:var(--color-text-secondary);font-style:italic;}
+.jcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;margin-bottom:8px;}
+.jct{font-size:10px;font-weight:500;color:var(--color-text-secondary);margin-bottom:6px;}
+.jr{display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;margin-bottom:6px;}
+.jr-auto{background:#EAF3DE;color:#27500A;}
+.jr-tr{background:#FAEEDA;color:#633806;}
+.jr-oc{background:#EEEDFE;color:#26215C;}
+.rl{display:flex;flex-direction:column;gap:3px;}
+.ri{font-size:10px;color:var(--color-text-secondary);display:flex;align-items:flex-start;gap:4px;}
+.rid{width:3px;height:3px;border-radius:50%;background:#888780;margin-top:5px;flex-shrink:0;}
+.occard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:10px 12px;margin-bottom:7px;}
+.och{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.oct{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.ocs{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;}
+.ocs-w{background:#FAEEDA;color:#854F0B;}
+.ocs-c{background:#EEEDFE;color:#3C3489;}
+.ocs-d{background:#EAF3DE;color:#3B6D11;}
+.ocs-f{background:#FCEBEB;color:#A32D2D;}
+.oci{font-size:10px;color:var(--color-text-secondary);margin-bottom:6px;line-height:1.5;}
+.ocb{padding:5px 12px;border-radius:var(--border-radius-md);border:none;font-size:10px;font-weight:500;cursor:pointer;}
+.ocb-s{background:#534AB7;color:#fff;}
+.ocb-d{background:#EAF3DE;color:#3B6D11;cursor:default;}
+.ag-actions{border-top:0.5px solid var(--color-border-tertiary);padding:8px 12px;display:flex;gap:6px;flex-shrink:0;background:var(--color-background-primary);}
+.aab{flex:1;padding:7px 0;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;text-align:center;}
+.aab:hover{background:var(--color-background-secondary);}
+.aab-tr{background:#FAEEDA;border-color:#EF9F27;color:#633806;}
+.aab-tr:hover{background:#FAC775;}
+.aab-reg{background:#185FA5;border-color:#185FA5;color:#fff;}
+.aab-reg:hover{background:#0C447C;}
+.aab-end{color:var(--color-text-secondary);}
+.aab:disabled{opacity:.4;cursor:default;}
+
+/* 配車 */
+.haisha-wrap{display:grid;grid-template-columns:170px 1fr;min-height:500px;}
+.vp{border-right:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);overflow-y:auto;padding:6px;}
+.vsec{font-size:10px;color:var(--color-text-secondary);padding:4px 3px 2px;font-weight:500;}
+.vi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 8px;margin-bottom:3px;cursor:pointer;transition:background .12s;}
+.vi:hover,.vi.sel{background:#E6F1FB;}
+.vn{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.vm{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+.vst{display:flex;align-items:center;gap:3px;margin-top:3px;}
+.dt{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dt-b{background:#639922;}.dt-a{background:#888780;}
+.rp{display:flex;flex-direction:column;overflow:hidden;}
+.rph{padding:7px 11px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--color-background-primary);}
+.rpt{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.asb{background:#185FA5;color:#fff;border:none;border-radius:var(--border-radius-md);padding:4px 9px;font-size:11px;cursor:pointer;}
+.asb:disabled{background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:default;}
+.rl2{flex:1;overflow-y:auto;padding:7px 11px;}
+.rs{display:flex;gap:7px;margin-bottom:6px;align-items:flex-start;}
+.rsn{width:18px;height:18px;border-radius:50%;background:#185FA5;color:#fff;font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.rsn.dep{background:#888780;}
+.rsi{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:6px 8px;}
+.rsin{font-size:11px;font-weight:500;color:var(--color-text-primary);}
+.rsid{font-size:10px;color:var(--color-text-secondary);margin-top:1px;}
+.rsl{width:1px;height:7px;background:var(--color-border-tertiary);margin-left:9px;margin-bottom:-3px;}
+.una{border-top:0.5px solid var(--color-border-tertiary);padding:7px 11px;background:var(--color-background-secondary);flex-shrink:0;}
+.unat{font-size:10px;color:var(--color-text-secondary);font-weight:500;margin-bottom:4px;}
+.unachips{display:flex;flex-wrap:wrap;gap:4px;}
+.chip{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:3px 8px;font-size:10px;cursor:pointer;transition:border-color .12s;}
+.chip:hover{border-color:#185FA5;color:#185FA5;}
+.chip.sel{border-color:#185FA5;background:#E6F1FB;color:#185FA5;}
+
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#3B6D11;color:#fff;padding:8px 18px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;z-index:999;animation:fu .25s;pointer-events:none;}
+@keyframes fu{from{opacity:0;transform:translateX(-50%) translateY(6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+
+<div class="app">
+<div class="sidebar">
+  <div class="sb-hd">
+    <div class="sb-logo">🚛 配車管理システム</div>
+    <div class="sb-sub" id="sbDate"></div>
+  </div>
+  <div class="sb-sec">案件受付</div>
+  <div class="ni active" id="nav-ai" onclick="go('ai')"><span class="ni-icon">🤖</span> AI電話応答 <span class="nb nb-r" id="aiBadge">対応中</span></div>
+  <div class="ni" id="nav-tel" onclick="go('tel')"><span class="ni-icon">📞</span> 電話受付（録音）</div>
+  <div class="ni" id="nav-fax" onclick="go('fax')"><span class="ni-icon">📠</span> FAX受付 <span class="nb nb-w">2件</span></div>
+  <div class="ni" id="nav-mail" onclick="go('mail')"><span class="ni-icon">✉️</span> メール受付 <span class="nb nb-n">3件</span></div>
+  <div class="ni" id="nav-recv" onclick="go('recv')"><span class="ni-icon">📋</span> 受付済み一覧</div>
+  <div class="sb-div"></div>
+  <div class="sb-sec">配車管理</div>
+  <div class="ni" id="nav-dash" onclick="go('dash')"><span class="ni-icon">📊</span> ダッシュボード</div>
+  <div class="ni" id="nav-haisha" onclick="go('haisha')"><span class="ni-icon">🗺️</span> 配車・ルート</div>
+  <div class="ni" id="nav-veh" onclick="go('veh')"><span class="ni-icon">🚚</span> 車両一覧</div>
+  <div class="sb-foot">
+    <div class="sf-row"><span class="sf-lbl">本日受付</span><span class="sf-val" id="sbRecv">12件</span></div>
+    <div class="sf-row"><span class="sf-lbl">AI完結率</span><span class="sf-val green">73%</span></div>
+    <div class="sf-row"><span class="sf-lbl">未割当</span><span class="sf-val red" id="sbWait">5件</span></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-l">
+      <div class="tb-title" id="tbTitle">🤖 AI電話応答エージェント</div>
+      <div class="tb-sub" id="tbSub">全員対応・AI一次判断→複雑案件は配車マンへ転送</div>
+    </div>
+    <div class="tb-r">
+      <div class="ai-pill"><div class="ai-dot on" id="aiDot"></div><span id="aiStatTxt">AI稼働中</span></div>
+      <span style="font-size:10px;color:var(--color-text-secondary)" id="tbDate"></span>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- AI電話エージェント -->
+    <div class="view active" id="view-ai">
+      <div class="ai-agent-grid">
+        <div class="ag-left">
+          <div class="ag-lh">
+            <div class="ag-lh-t">🤖 AI電話エージェント</div>
+            <div class="ag-lh-s">シナリオを選んでデモを体験</div>
+          </div>
+          <div class="ag-status">
+            <div class="asr"><span class="asl">ステータス</span><span class="asv"><span class="ai-dot on" style="display:inline-block;margin-right:4px" id="ag-dot"></span><span id="ag-stat">稼働中</span></span></div>
+            <div class="asr"><span class="asl">本日対応</span><span class="asv" id="ag-today">28件</span></div>
+            <div class="asr"><span class="asl">AI完結率</span><span class="asv" style="color:#3B6D11">73%</span></div>
+            <div class="asr" style="margin-bottom:0"><span class="asl">転送件数</span><span class="asv">7件</span></div>
+          </div>
+          <div style="font-size:10px;font-weight:500;color:var(--color-text-secondary);padding:7px 10px 3px">シナリオ選択</div>
+          <div class="sc-list">
+            <button class="scbtn" onclick="loadSc('neworder',this)"><div class="sct">📦 新規配送依頼（荷主）</div><div class="scs">情報収集→AI自動登録</div><span class="sctag tg-auto">AI完結</span></button>
+            <button class="scbtn" onclick="loadSc('confirm',this)"><div class="sct">✅ 配送完了確認（荷主へ）</div><div class="scs">完了後に自動コール</div><span class="sctag tg-oc">自動発信</span></button>
+            <button class="scbtn" onclick="loadSc('driver',this)"><div class="sct">🚚 ドライバー到着確認</div><div class="scs">遅延時に自動発信</div><span class="sctag tg-oc">自動発信</span></button>
+            <button class="scbtn" onclick="loadSc('schedule',this)"><div class="sct">📅 日程調整（受取人と）</div><div class="scs">受取人の都合を確認</div><span class="sctag tg-auto">AI完結</span></button>
+            <button class="scbtn" onclick="loadSc('reschedule',this)"><div class="sct">🔄 日程変更（荷主より）</div><div class="scs">複雑→配車マン転送</div><span class="sctag tg-tr">転送</span></button>
+            <button class="scbtn" onclick="loadSc('complaint',this)"><div class="sct">⚠️ クレーム・緊急対応</div><div class="scs">即時転送+ログ送信</div><span class="sctag tg-tr">転送</span></button>
+          </div>
+          <div class="ag-queue">
+            <div style="font-size:10px;font-weight:500;color:var(--color-text-secondary);margin-bottom:5px">対応キュー</div>
+            <div class="qitem"><span class="qi-ic">📦</span><span class="qi-nm">山田商事 #R042</span><span class="qi-bd qb-p">対応中</span></div>
+            <div class="qitem"><span class="qi-ic">📅</span><span class="qi-nm">鈴木物流 #R043</span><span class="qi-bd qb-w">待機</span></div>
+            <div class="qitem"><span class="qi-ic">✅</span><span class="qi-nm">田中製作所 #R041</span><span class="qi-bd qb-d">完了</span></div>
+          </div>
+        </div>
+        <div class="ag-right">
+          <div class="ag-rh">
+            <div><div class="ag-rh-t" id="ag-rht">シナリオを選択してください</div><div style="font-size:10px;color:var(--color-text-secondary)" id="ag-rhs">左のボタンをクリックしてデモ開始</div></div>
+            <div class="ag-timer" id="ag-timer">--:--</div>
+          </div>
+          <div class="ag-mid">
+            <div class="call-col">
+              <div class="caller-hd">
+                <div class="c-avatar" id="ag-avatar">--</div>
+                <div class="c-name" id="ag-name">未着電</div>
+                <div class="c-tel" id="ag-tel">—</div>
+                <div class="c-type" id="ag-type"></div>
+              </div>
+              <div class="wave-area">
+                <div class="wl">AI音声</div><div class="wf" id="agAiWave"></div>
+                <div class="wl" style="margin-top:5px">相手音声</div><div class="wf" id="agClWave"></div>
+              </div>
+              <div class="conv-log" id="agLog"><div style="text-align:center;font-size:10px;color:var(--color-text-secondary);padding:16px 0">シナリオを選ぶと会話が流れます</div></div>
+            </div>
+            <div class="info-col">
+              <div class="itabs">
+                <div class="itab active" onclick="swItab('ext',this)">抽出情報</div>
+                <div class="itab" onclick="swItab('judge',this)">AI判断</div>
+                <div class="itab" onclick="swItab('oc',this)">自動発信</div>
+              </div>
+              <div class="itab-content">
+                <div class="itc active" id="itc-ext">
+                  <div class="ext-grid">
+                    <div class="ei"><div class="el">依頼者</div><div class="ev em" id="xe-client">—</div></div>
+                    <div class="ei"><div class="el">電話番号</div><div class="ev em" id="xe-phone">—</div></div>
+                    <div class="ei"><div class="el">集荷先</div><div class="ev em" id="xe-from">—</div></div>
+                    <div class="ei"><div class="el">配送先</div><div class="ev em" id="xe-to">—</div></div>
+                    <div class="ei"><div class="el">重量</div><div class="ev em" id="xe-weight">—</div></div>
+                    <div class="ei"><div class="el">希望日時</div><div class="ev em" id="xe-time">—</div></div>
+                  </div>
+                </div>
+                <div class="itc" id="itc-judge">
+                  <div class="jcard">
+                    <div class="jct">AIの判断</div>
+                    <div class="jr" id="ag-jr" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">判断待ち</div>
+                    <div class="jct">判断根拠</div>
+                    <div class="rl" id="ag-rl"><div class="ri"><div class="rid"></div>会話内容を分析中...</div></div>
+                  </div>
+                  <div class="jcard" id="ag-sumcard" style="display:none">
+                    <div class="jct">通話要約（転送時に配車マンへ送信）</div>
+                    <div id="ag-sum" style="font-size:11px;color:var(--color-text-primary);line-height:1.6;background:#E6F1FB;border-radius:var(--border-radius-md);padding:8px 10px;border:0.5px solid #B5D4F4"></div>
+                  </div>
+                </div>
+                <div class="itc" id="itc-oc">
+                  <div id="ag-oclist"><div style="text-align:center;font-size:10px;color:var(--color-text-secondary);padding:16px 0">自動発信シナリオ選択で表示</div></div>
+                </div>
+              </div>
+              <div class="ag-actions">
+                <button class="aab aab-end" id="ag-bend" disabled onclick="agEnd()">終話</button>
+                <button class="aab aab-tr" id="ag-btr" disabled onclick="agTransfer()">配車マンへ転送</button>
+                <button class="aab aab-reg" id="ag-breg" disabled onclick="agRegister()">案件登録</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 電話受付（録音） -->
+    <div class="view" id="view-tel">
+      <div class="sc">
+        <div class="sc-ttl">🎙️ 通話録音</div>
+        <div class="rec-steps">
+          <div class="rstep act" id="rs1"><div class="rsnum">1</div> 録音</div><div class="sarr">›</div>
+          <div class="rstep" id="rs2"><div class="rsnum">2</div> 文字起こし</div><div class="sarr">›</div>
+          <div class="rstep" id="rs3"><div class="rsnum">3</div> AI要約</div><div class="sarr">›</div>
+          <div class="rstep" id="rs4"><div class="rsnum">4</div> 登録</div>
+        </div>
+        <div class="rec-main">
+          <div class="rtimer" id="rtimer">00:00</div>
+          <div class="waveform" id="rwf"></div>
+          <div class="rec-ctrls">
+            <button class="rbtn rs" id="rbS" onclick="startRec()">● 録音開始</button>
+            <button class="rbtn rp" id="rbP" disabled onclick="pauseRec()">⏸ 一時停止</button>
+            <button class="rbtn re" id="rbE" disabled onclick="stopRec()">■ 停止</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin:8px 0"><div style="flex:1;height:0.5px;background:var(--color-border-tertiary)"></div><span style="font-size:10px;color:var(--color-text-secondary)">または音声ファイルをアップロード</span><div style="flex:1;height:0.5px;background:var(--color-border-tertiary)"></div></div>
+        <div class="upz" onclick="simRec()"><p>🎵 MP3 / WAV / M4A — クリックまたはドロップ</p></div>
+      </div>
+      <div class="sc" id="tel-txcard" style="display:none"><div class="sc-ttl">📝 文字起こし</div><div class="txbox" id="tel-tx"></div><div class="lbar" id="tel-lbar" style="display:none"><div class="lfill" id="tel-lfill" style="width:0%"></div></div></div>
+      <div class="sc" id="tel-aicard" style="display:none"><div class="sc-ttl">✨ AI解析中</div><div id="tel-procs"></div></div>
+      <div class="sc" id="tel-rescard" style="display:none">
+        <div class="sc-ttl">✅ 確認・修正して登録</div>
+        <div style="font-size:10px;font-weight:500;color:#185FA5;margin-bottom:4px">通話要約</div>
+        <div class="sum-box" id="tel-sum"></div>
+        <div class="fg" style="margin-top:9px">
+          <div class="fr"><label class="fl">依頼者<span class="req">必須</span></label><input class="fi" id="tr-client"/></div>
+          <div class="fr"><label class="fl">電話番号</label><input class="fi" id="tr-phone"/></div>
+          <div class="fr"><label class="fl">集荷先<span class="req">必須</span></label><input class="fi" id="tr-from"/></div>
+          <div class="fr"><label class="fl">配送先<span class="req">必須</span></label><input class="fi" id="tr-to"/></div>
+          <div class="fr"><label class="fl">重量</label><input class="fi" id="tr-weight"/></div>
+          <div class="fr"><label class="fl">希望日時</label><input class="fi" id="tr-time"/></div>
+        </div>
+        <div class="fr" style="margin-top:6px"><label class="fl">備考</label><input class="fi" id="tr-note" style="width:100%"/></div>
+        <div class="sub-row" style="margin-top:8px"><button class="btn-c" onclick="resetTel()">やり直す</button><button class="btn-s" onclick="submitTel()">案件を登録する</button></div>
+      </div>
+    </div>
+
+    <!-- FAX受付 -->
+    <div class="view" id="view-fax">
+      <div class="sc">
+        <div class="sc-ttl">📠 FAX画像をアップロード</div>
+        <div id="fupz" class="upz" onclick="document.getElementById('ff').click()"><input type="file" id="ff" style="display:none" accept="image/*,.pdf" onchange="handleFax(this)"/><p>📄 FAX画像またはPDF</p></div>
+        <div id="fprev" style="display:none"></div>
+        <button class="ai-btn ai-off" id="faxAiBtn" onclick="runFaxAI()"><span>✨</span> AIで自動読み取り</button>
+        <div id="faxAiSt" style="display:none;font-size:10px;color:var(--color-text-secondary);padding:3px 0"></div>
+        <div id="faxAiRes" style="display:none"></div>
+      </div>
+      <div class="sc">
+        <div class="sc-ttl">📦 読み取り結果を確認・修正</div>
+        <div class="fg">
+          <div class="fr"><label class="fl">依頼者<span class="req">必須</span></label><input class="fi" id="fc-client" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">電話番号</label><input class="fi" id="fc-phone" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">集荷先<span class="req">必須</span></label><input class="fi" id="fc-from" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">配送先<span class="req">必須</span></label><input class="fi" id="fc-to" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">重量</label><input class="fi" id="fc-weight" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">希望日時</label><input class="fi" id="fc-time" placeholder="AIが自動入力"/></div>
+        </div>
+      </div>
+      <div class="sub-row"><button class="btn-c" onclick="clearFax()">クリア</button><button class="btn-s" onclick="submitCase('fax')">案件を登録する</button></div>
+    </div>
+
+    <!-- メール受付 -->
+    <div class="view" id="view-mail">
+      <div class="sc">
+        <div class="sc-ttl">✉️ メール本文を貼り付け</div>
+        <div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;">
+          <div style="background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);padding:4px 8px;display:flex;justify-content:space-between;align-items:center;"><span style="font-size:10px;color:var(--color-text-secondary)">メール文面をコピーして貼り付け</span><button onclick="sampleMail()" style="font-size:10px;background:none;border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:2px 7px;cursor:pointer;color:var(--color-text-secondary)">サンプル挿入</button></div>
+          <textarea class="fta" id="mailBody" style="border:none;border-radius:0;min-height:70px;padding:8px 9px;"></textarea>
+        </div>
+        <button class="ai-btn ai-r" id="mailAiBtn" onclick="runMailAI()"><span>✨</span> AIで情報を自動抽出</button>
+        <div id="mailAiSt" style="display:none;font-size:10px;padding:3px 0;color:var(--color-text-secondary)"></div>
+        <div id="mailAiRes" style="display:none"></div>
+      </div>
+      <div class="sc">
+        <div class="sc-ttl">📦 抽出結果を確認・修正</div>
+        <div class="fg">
+          <div class="fr"><label class="fl">依頼者<span class="req">必須</span></label><input class="fi" id="mc-client" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">返信先メール</label><input class="fi" id="mc-email" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">集荷先<span class="req">必須</span></label><input class="fi" id="mc-from" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">配送先<span class="req">必須</span></label><input class="fi" id="mc-to" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">重量</label><input class="fi" id="mc-weight" placeholder="AIが自動入力"/></div>
+          <div class="fr"><label class="fl">希望日時</label><input class="fi" id="mc-time" placeholder="AIが自動入力"/></div>
+        </div>
+      </div>
+      <div class="sub-row"><button class="btn-c" onclick="clearMail()">クリア</button><button class="btn-s" onclick="submitCase('mail')">案件を登録する</button></div>
+    </div>
+
+    <!-- 受付済み一覧 -->
+    <div class="view" id="view-recv"><div id="recvList"></div></div>
+
+    <!-- ダッシュボード -->
+    <div class="view" id="view-dash">
+      <div class="stats4">
+        <div class="stat"><div class="stat-lbl">本日の配送件数</div><div class="stat-val sv-b" id="dTotal">—</div><div class="stat-sub">稼働5台</div></div>
+        <div class="stat"><div class="stat-lbl">完了</div><div class="stat-val sv-g" id="dDone">—</div><div class="stat-sub">完了率 <span id="dRate">—</span>%</div></div>
+        <div class="stat"><div class="stat-lbl">配送中</div><div class="stat-val sv-a" id="dTr">—</div><div class="stat-sub">3台走行中</div></div>
+        <div class="stat"><div class="stat-lbl">未割当</div><div class="stat-val sv-r" id="dWait">—</div><div class="stat-sub">要対応</div></div>
+      </div>
+      <div class="two-col">
+        <div class="panel"><div class="ph">配送一覧<span class="ph-link" onclick="go('haisha')">配車へ →</span></div><div class="pb" id="dashOrders"></div></div>
+        <div class="panel"><div class="ph">最近の受付<span class="ph-link" onclick="go('recv')">一覧 →</span></div><div class="pb" id="dashRecv"></div></div>
+      </div>
+    </div>
+
+    <!-- 配車・ルート -->
+    <div class="view" id="view-haisha">
+      <div class="haisha-wrap">
+        <div class="vp"><div class="vsec">稼働中</div><div id="vehList"></div></div>
+        <div class="rp">
+          <div class="rph"><div class="rpt" id="rpt">車両を選択してください</div><button class="asb" id="asb" disabled onclick="assignOrd()">割当</button></div>
+          <div class="rl2" id="routeList"><div style="font-size:11px;color:var(--color-text-secondary);padding:14px 0;text-align:center">← 車両を選択</div></div>
+          <div class="una"><div class="unat">未割当（クリックで選択）</div><div class="unachips" id="unaChips"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 車両一覧 -->
+    <div class="view" id="view-veh"><div id="vehFull"></div></div>
+
+  </div>
+</div>
+</div>
+
+<script>
+// ---- データ ----
+const orders=[
+  {id:'#1001',dest:'東京都新宿区西新宿',weight:'250kg',time:'09:00〜12:00',status:'done',vehicle:'トラックA',ch:'tel'},
+  {id:'#1002',dest:'東京都渋谷区渋谷',weight:'80kg',time:'09:00〜11:00',status:'done',vehicle:'軽バンC',ch:'mail'},
+  {id:'#1003',dest:'東京都品川区大崎',weight:'320kg',time:'10:00〜13:00',status:'done',vehicle:'トラックA',ch:'fax'},
+  {id:'#1004',dest:'神奈川県横浜市西区',weight:'150kg',time:'10:00〜14:00',status:'done',vehicle:'トラックB',ch:'tel'},
+  {id:'#1005',dest:'東京都港区六本木',weight:'90kg',time:'11:00〜13:00',status:'done',vehicle:'軽バンD',ch:'ai'},
+  {id:'#1006',dest:'東京都中央区銀座',weight:'200kg',time:'11:00〜14:00',status:'done',vehicle:'トラックB',ch:'fax'},
+  {id:'#1007',dest:'東京都千代田区丸の内',weight:'180kg',time:'12:00〜15:00',status:'done',vehicle:'トラックA',ch:'ai'},
+  {id:'#1008',dest:'神奈川県川崎市中原区',weight:'420kg',time:'11:00〜15:00',status:'transit',vehicle:'トラックA',ch:'tel'},
+  {id:'#1009',dest:'東京都江東区豊洲',weight:'110kg',time:'12:00〜15:00',status:'transit',vehicle:'軽バンC',ch:'mail'},
+  {id:'#1010',dest:'東京都墨田区押上',weight:'75kg',time:'12:00〜14:00',status:'transit',vehicle:'軽バンD',ch:'ai'},
+  {id:'#1011',dest:'千葉県船橋市本町',weight:'380kg',time:'13:00〜17:00',status:'transit',vehicle:'トラックB',ch:'tel'},
+  {id:'#1012',dest:'東京都杉並区高円寺',weight:'95kg',time:'13:00〜16:00',status:'transit',vehicle:'軽バンE',ch:'ai'},
+  {id:'#1013',dest:'東京都練馬区光が丘',weight:'210kg',time:'13:00〜16:00',status:'transit',vehicle:'軽バンE',ch:'fax'},
+  {id:'#1014',dest:'埼玉県さいたま市大宮区',weight:'340kg',time:'14:00〜18:00',status:'assigned',vehicle:'トラックB',ch:'tel'},
+  {id:'#1015',dest:'東京都世田谷区三軒茶屋',weight:'130kg',time:'14:00〜17:00',status:'assigned',vehicle:'軽バンC',ch:'mail'},
+  {id:'#1016',dest:'東京都目黒区中目黒',weight:'85kg',time:'15:00〜18:00',status:'waiting',vehicle:null,ch:'fax'},
+  {id:'#1017',dest:'神奈川県相模原市中央区',weight:'290kg',time:'15:00〜18:00',status:'waiting',vehicle:null,ch:'ai'},
+  {id:'#1018',dest:'東京都北区赤羽',weight:'165kg',time:'16:00〜19:00',status:'waiting',vehicle:null,ch:'mail'},
+  {id:'#1019',dest:'東京都板橋区大山',weight:'55kg',time:'16:00〜18:00',status:'waiting',vehicle:null,ch:'fax'},
+  {id:'#1020',dest:'千葉県千葉市中央区',weight:'310kg',time:'16:00〜19:00',status:'waiting',vehicle:null,ch:'ai'},
+];
+const vehicles=[
+  {id:'v1',name:'トラックA',driver:'佐藤 一郎',cap:'2t',status:'busy'},
+  {id:'v2',name:'トラックB',driver:'鈴木 次郎',cap:'2t',status:'busy'},
+  {id:'v3',name:'軽バンC',driver:'高橋 三郎',cap:'350kg',status:'busy'},
+  {id:'v4',name:'軽バンD',driver:'田中 四郎',cap:'350kg',status:'busy'},
+  {id:'v5',name:'軽バンE',driver:'伊藤 五郎',cap:'350kg',status:'busy'},
+  {id:'v6',name:'トラックF',driver:'渡辺 六郎',cap:'4t',status:'available'},
+];
+const received=[
+  {id:'#R039',ch:'mail',client:'千葉物流 佐々木様',from:'東京都江東区',to:'千葉市中央区',weight:'220kg',time:'13:00〜17:00',note:'要冷蔵'},
+  {id:'#R040',ch:'fax',client:'品川商事 鈴木様',from:'東京都品川区',to:'神奈川県川崎市',weight:'180kg',time:'10:00〜13:00',note:''},
+  {id:'#R041',ch:'ai',client:'神奈川物流 鈴木様',from:'東京都港区芝浦',to:'埼玉県さいたま市大宮区',weight:'400kg',time:'4/28 09:00〜12:00',note:'精密機器・1階引き渡し'},
+  {id:'#R042',ch:'tel',client:'山田商事 山田様',from:'東京都渋谷区',to:'神奈川県横浜市',weight:'350kg',time:'14:00〜18:00',note:'置き配不可'},
+];
+const pgInfo={
+  ai:{title:'🤖 AI電話応答エージェント',sub:'全員対応・AI一次判断→複雑案件は配車マンへ転送'},
+  tel:{title:'📞 電話受付（録音）',sub:'録音→文字起こし→AI要約→自動データ化'},
+  fax:{title:'📠 FAX受付',sub:'FAX画像をアップロードしてAI自動読み取り'},
+  mail:{title:'✉️ メール受付',sub:'メール本文を貼り付けてAI情報抽出'},
+  recv:{title:'📋 受付済み一覧',sub:'電話・FAX・メール・AIで受け付けた案件'},
+  dash:{title:'📊 ダッシュボード',sub:'本日の配送状況'},
+  haisha:{title:'🗺️ 配車・ルート管理',sub:'車両を選択して配送を割り当て'},
+  veh:{title:'🚚 車両一覧',sub:'稼働中・空車の状況'},
+};
+let selVeh=null,selChip=null;
+
+// 日付
+const now=new Date();
+const ds=`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+document.getElementById('sbDate').textContent=ds;
+document.getElementById('tbDate').textContent=ds;
+
+// ---- ナビ ----
+function go(p){
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+p).classList.add('active');
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+p).classList.add('active');
+  document.getElementById('tbTitle').textContent=pgInfo[p].title;
+  document.getElementById('tbSub').textContent=pgInfo[p].sub;
+  if(p==='dash')renderDash();
+  if(p==='haisha'){renderVehList();renderUna();}
+  if(p==='veh')renderVehFull();
+  if(p==='recv')renderRecv();
+}
+function updateSB(){
+  const w=orders.filter(o=>o.status==='waiting').length;
+  document.getElementById('sbRecv').textContent=(12+received.length-3)+'件';
+  document.getElementById('sbWait').textContent=w+'件';
+}
+updateSB();
+
+// ---- ダッシュ ----
+function renderDash(){
+  const done=orders.filter(o=>o.status==='done').length,tr=orders.filter(o=>o.status==='transit').length,w=orders.filter(o=>o.status==='waiting').length;
+  document.getElementById('dTotal').textContent=orders.length;
+  document.getElementById('dDone').textContent=done;
+  document.getElementById('dRate').textContent=Math.round(done/orders.length*100);
+  document.getElementById('dTr').textContent=tr;
+  document.getElementById('dWait').textContent=w;
+  const chIcon={tel:'📞',fax:'📠',mail:'✉️',ai:'🤖'};
+  const stLbl={waiting:'未割当',assigned:'割当済',transit:'配送中',done:'完了'};
+  const dO=document.getElementById('dashOrders');dO.innerHTML='';
+  orders.slice().reverse().forEach(o=>{
+    const d=document.createElement('div');d.className='oc';
+    d.innerHTML=`<div class="oc-row"><span class="oc-id">${o.id}</span><span class="badge b-${o.status}">${stLbl[o.status]}</span></div>
+    <div class="oc-dest">${o.dest}</div>
+    <div class="oc-meta"><span>${o.weight}</span><span>${o.time}</span><span class="badge b-${o.ch}" style="margin-left:auto">${chIcon[o.ch]||'📦'}</span></div>`;
+    dO.appendChild(d);
+  });
+  const dR=document.getElementById('dashRecv');dR.innerHTML='';
+  [...received].reverse().forEach(r=>{
+    const d=document.createElement('div');d.className='oc';
+    d.innerHTML=`<div class="oc-row"><span class="oc-id">${r.id}</span><span class="badge b-${r.ch}">${{tel:'📞',fax:'📠',mail:'✉️',ai:'🤖'}[r.ch]} ${r.ch==='ai'?'AI受付':r.ch}</span></div>
+    <div class="oc-dest">${r.client}</div><div class="oc-meta">${r.from}→${r.to}</div>`;
+    dR.appendChild(d);
+  });
+}
+
+// ---- 配車 ----
+function renderVehList(){
+  const el=document.getElementById('vehList');el.innerHTML='';
+  vehicles.forEach(v=>{
+    const my=orders.filter(o=>o.vehicle===v.name);
+    const d=document.createElement('div');d.className='vi'+(selVeh&&selVeh.id===v.id?' sel':'');
+    d.innerHTML=`<div class="vn">${v.name}</div><div class="vm">${v.driver}・${v.cap}</div>
+    <div class="vst"><span class="dt ${v.status==='busy'?'dt-b':'dt-a'}"></span><span style="font-size:9px;color:var(--color-text-secondary)">${v.status==='busy'?'稼働'+my.length+'件':'空車'}</span></div>`;
+    d.onclick=()=>selVehicle(v);el.appendChild(d);
+  });
+}
+function renderUna(){
+  const el=document.getElementById('unaChips');el.innerHTML='';
+  const w=orders.filter(o=>o.status==='waiting');
+  if(!w.length){el.innerHTML='<span style="font-size:10px;color:var(--color-text-secondary)">未割当なし</span>';return;}
+  w.forEach(o=>{
+    const c=document.createElement('div');c.className='chip'+(selChip&&selChip.id===o.id?' sel':'');
+    c.textContent=o.id+' '+o.dest.slice(0,7)+'…';
+    c.onclick=()=>{selChip=(selChip&&selChip.id===o.id)?null:o;renderUna();updAsb();};
+    el.appendChild(c);
+  });
+}
+function selVehicle(v){
+  selVeh=v;renderVehList();updAsb();
+  document.getElementById('rpt').textContent=v.name+'（'+v.driver+'）のルート';
+  const rl=document.getElementById('routeList');rl.innerHTML=`<div class="rs"><div class="rsn dep">🏭</div><div class="rsi"><div class="rsin">出発地（営業所）</div><div class="rsid">08:30出発</div></div></div>`;
+  orders.filter(o=>o.vehicle===v.name).forEach((o,i)=>{
+    rl.innerHTML+=`<div class="rsl"></div><div class="rs"><div class="rsn">${i+1}</div><div class="rsi"><div class="rsin">${o.id} ${o.dest}</div><div class="rsid">${o.weight}・${o.time}</div></div></div>`;
+  });
+}
+function updAsb(){document.getElementById('asb').disabled=!(selVeh&&selChip);}
+function assignOrd(){
+  if(!selVeh||!selChip)return;
+  const o=orders.find(x=>x.id===selChip.id);
+  if(o){o.status='assigned';o.vehicle=selVeh.name;}
+  selChip=null;renderVehList();renderUna();selVehicle(selVeh);updAsb();updateSB();
+  toast('✅ '+o.id+' を '+selVeh.name+' に割り当てました');
+}
+function renderVehFull(){
+  const el=document.getElementById('vehFull');el.innerHTML='';
+  vehicles.forEach(v=>{
+    const my=orders.filter(o=>o.vehicle===v.name);
+    const d=document.createElement('div');d.className='oc';d.style.marginBottom='6px';
+    d.innerHTML=`<div class="oc-row"><span class="oc-id">${v.name}</span><span style="font-size:10px;color:var(--color-text-secondary)">${v.driver}・${v.cap}</span><span class="badge b-${v.status==='busy'?'transit':'done'}">${v.status==='busy'?'稼働中':'空車'}</span></div>
+    <div style="margin-top:5px;font-size:10px;color:var(--color-text-secondary)">担当: ${my.length}件</div>
+    <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">${my.map(o=>`<span style="font-size:9px;background:var(--color-background-secondary);padding:1px 6px;border-radius:20px;color:var(--color-text-secondary)">${o.id}</span>`).join('')}</div>`;
+    el.appendChild(d);
+  });
+}
+function renderRecv(){
+  const el=document.getElementById('recvList');el.innerHTML='';
+  const chLbl={tel:'📞 電話',fax:'📠 FAX',mail:'✉️ メール',ai:'🤖 AI受付'};
+  [...received].reverse().forEach(r=>{
+    const d=document.createElement('div');d.className='oc';d.style.marginBottom='6px';
+    d.innerHTML=`<div class="oc-row"><span class="oc-id">${r.id}</span><span class="badge b-${r.ch}">${chLbl[r.ch]||r.ch}</span></div>
+    <div style="font-size:10px;color:var(--color-text-secondary);margin-top:2px">${r.client}</div>
+    <div class="oc-meta"><span>${r.from}→${r.to}</span><span>${r.weight}</span><span>${r.time}</span></div>
+    ${r.note?'<div style="font-size:10px;color:#854F0B;margin-top:2px">備考: '+r.note+'</div>':''}`;
+    el.appendChild(d);
+  });
+}
+
+// ---- 録音 ----
+const rwf=document.getElementById('rwf');
+for(let i=0;i<18;i++){const b=document.createElement('div');b.className='wb';b.style.height='3px';rwf.appendChild(b);}
+let rSecs=0,rPaused=false,rInv=null,wInv=null,rTos=[];
+function animRW(on){document.querySelectorAll('#rwf .wb').forEach(b=>{b.classList.toggle('act',on);if(on)b.style.height=(Math.floor(Math.random()*18)+3)+'px';else b.style.height='3px';});}
+function setRS(n){for(let i=1;i<=4;i++){const s=document.getElementById('rs'+i);s.classList.remove('act','dn');if(i<n)s.classList.add('dn');else if(i===n)s.classList.add('act');}}
+async function startRec(){
+  rSecs=0;rPaused=false;
+  document.getElementById('rtimer').classList.add('rec');document.getElementById('rbS').disabled=true;document.getElementById('rbP').disabled=false;document.getElementById('rbE').disabled=false;
+  rInv=setInterval(()=>{if(!rPaused){rSecs++;const m=String(Math.floor(rSecs/60)).padStart(2,'0'),s=String(rSecs%60).padStart(2,'0');document.getElementById('rtimer').textContent=m+':'+s;}},1000);
+  wInv=setInterval(()=>animRW(true),120);
+}
+function pauseRec(){rPaused=!rPaused;document.getElementById('rbP').textContent=rPaused?'▶ 再開':'⏸ 一時停止';animRW(!rPaused);}
+function stopRec(){
+  clearInterval(rInv);clearInterval(wInv);animRW(false);
+  document.getElementById('rtimer').classList.remove('rec');document.getElementById('rbP').disabled=true;document.getElementById('rbE').disabled=true;
+  setRS(2);setTimeout(()=>doTx(),200);
+}
+function simRec(){startRec();setTimeout(()=>stopRec(),500);}
+function resetTel(){
+  clearInterval(rInv);clearInterval(wInv);animRW(false);rSecs=0;rPaused=false;
+  rTos.forEach(t=>clearTimeout(t));rTos=[];
+  document.getElementById('rtimer').textContent='00:00';document.getElementById('rtimer').classList.remove('rec');
+  document.getElementById('rbS').disabled=false;document.getElementById('rbP').disabled=true;document.getElementById('rbE').disabled=true;
+  document.getElementById('rbP').textContent='⏸ 一時停止';
+  ['tel-txcard','tel-aicard','tel-rescard'].forEach(id=>document.getElementById(id).style.display='none');
+  ['tr-client','tr-phone','tr-from','tr-to','tr-weight','tr-time','tr-note'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.classList.remove('filled');}});
+  setRS(1);
+}
+const demoTx=`オペレーター：はい、〇〇運送です。
+お客様：神奈川物流センターの鈴木です。来週月曜に荷物をお願いしたくて。
+オペレーター：集荷先と配送先をお聞かせください。
+お客様：東京都港区芝浦から埼玉県さいたま市大宮区です。電子部品で約400キロ、午前9時から12時希望です。エレベーターが使えないので1階引き渡しでお願いします。
+オペレーター：承知しました。4月28日午前、芝浦→大宮、400kg精密機器、1階引き渡しで承ります。`;
+async function doTx(){
+  const card=document.getElementById('tel-txcard');card.style.display='block';
+  const box=document.getElementById('tel-tx');
+  const bar=document.getElementById('tel-lbar');bar.style.display='block';
+  const fill=document.getElementById('tel-lfill');
+  let p=0;const pi=setInterval(()=>{p=Math.min(p+11,90);fill.style.width=p+'%';},200);
+  await sl(2000);clearInterval(pi);fill.style.width='100%';bar.style.display='none';
+  box.textContent='';let i=0;
+  const ti=setInterval(()=>{if(i<demoTx.length){box.textContent+=demoTx[i];box.scrollTop=box.scrollHeight;i+=Math.floor(Math.random()*4)+2;}else{box.textContent=demoTx;clearInterval(ti);setRS(3);setTimeout(()=>doTelAI(demoTx),300);}},25);
+}
+async function doTelAI(tx){
+  const aiC=document.getElementById('tel-aicard');aiC.style.display='block';
+  const ps=document.getElementById('tel-procs');
+  ps.innerHTML='<div id="tp1" style="font-size:10px;color:#185FA5;padding:3px 0">⏳ 通話を要約中...</div><div id="tp2" style="font-size:10px;opacity:.4;padding:3px 0">⏳ 案件情報を抽出中...</div><div id="tp3" style="font-size:10px;opacity:.4;padding:3px 0">⏳ フォームに入力中...</div>';
+  await sl(700);document.getElementById('tp1').innerHTML='✅ 通話を要約しました';document.getElementById('tp1').style.color='#3B6D11';
+  document.getElementById('tp2').style.opacity='1';await sl(600);
+  let ext={client:'神奈川物流センター 鈴木様',phone:'—',from:'東京都港区芝浦',to:'埼玉県さいたま市大宮区',weight:'約400kg（電子部品）',time:'4月28日 09:00〜12:00',note:'精密機器・1階引き渡し',summary:'神奈川物流センター鈴木様より4月28日午前に東京港区芝浦から埼玉大宮へ精密電子部品（約400kg）の配送依頼。1階引き渡し希望。'};
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`電話文字起こしから配送案件をJSON抽出（前後の説明・\`\`\`不要）。キー:client,phone,from,to,weight,time,note,summary\n${tx}`}]})});
+    const data=await res.json();
+    ext=JSON.parse(data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim());
+  }catch(e){}
+  document.getElementById('tp2').innerHTML='✅ 案件情報を抽出しました';document.getElementById('tp2').style.color='#3B6D11';
+  document.getElementById('tp3').style.opacity='1';await sl(400);
+  document.getElementById('tp3').innerHTML='✅ フォームに自動入力しました';document.getElementById('tp3').style.color='#3B6D11';
+  setRS(4);
+  const rc=document.getElementById('tel-rescard');rc.style.display='block';
+  document.getElementById('tel-sum').textContent=ext.summary||'—';
+  Object.entries({client:ext.client,phone:ext.phone,from:ext.from,to:ext.to,weight:ext.weight,time:ext.time,note:ext.note}).forEach(([k,v])=>{
+    const el=document.getElementById('tr-'+k);if(el&&v&&v!=='—'){el.value=v;el.classList.add('filled');}
+  });
+}
+function submitTel(){
+  const c=document.getElementById('tr-client').value,f=document.getElementById('tr-from').value,t=document.getElementById('tr-to').value;
+  if(!c||!f||!t){toast('必須項目を入力してください');return;}
+  const nid='#R0'+(43+received.length);
+  received.push({id:nid,ch:'tel',client:c,from:f,to:t,weight:document.getElementById('tr-weight').value||'—',time:document.getElementById('tr-time').value||'—',note:document.getElementById('tr-note').value||''});
+  orders.push({id:'#'+(1021+orders.length-20),dest:t,weight:document.getElementById('tr-weight').value||'—',time:document.getElementById('tr-time').value||'—',status:'waiting',vehicle:null,ch:'tel'});
+  updateSB();toast('✅ 案件 '+nid+' を登録しました！');setTimeout(()=>resetTel(),1500);
+}
+
+// ---- FAX ----
+function handleFax(inp){
+  if(!inp.files||!inp.files[0])return;
+  const f=inp.files[0];
+  document.getElementById('fupz').style.display='none';
+  document.getElementById('fprev').style.display='block';
+  document.getElementById('fprev').innerHTML=`<div style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:7px 9px;display:flex;align-items:center;gap:7px;margin-top:6px"><span style="font-size:16px">${f.type.includes('pdf')?'📄':'🖼️'}</span><div><div style="font-size:11px;font-weight:500">${f.name}</div><div style="font-size:10px;color:var(--color-text-secondary)">${(f.size/1024).toFixed(0)}KB</div></div><span onclick="clearFax()" style="margin-left:auto;font-size:10px;color:#A32D2D;cursor:pointer;padding:2px 7px;border-radius:20px;background:#FCEBEB">削除</span></div>`;
+  const btn=document.getElementById('faxAiBtn');btn.className='ai-btn ai-r';btn.innerHTML='<span>✨</span> AIで自動読み取り';
+}
+async function runFaxAI(){
+  const btn=document.getElementById('faxAiBtn');if(btn.classList.contains('ai-off'))return;
+  btn.className='ai-btn ai-off';btn.innerHTML='<span>⏳</span> 読み取り中...';
+  const st=document.getElementById('faxAiSt');st.style.display='block';st.innerHTML='解析中...<div class="lbar"><div class="lfill" id="ffill" style="width:0%"></div></div>';
+  let p=0;const pi=setInterval(()=>{p=Math.min(p+10,90);const e=document.getElementById('ffill');if(e)e.style.width=p+'%';},200);
+  await sl(2000);clearInterval(pi);st.style.display='none';
+  const r={client:'山田商事 山田一郎',phone:'03-4567-8901',from:'東京都中央区銀座1-2-3',to:'神奈川県横浜市西区みなとみらい',weight:'280kg',time:'4/26 午前中',note:'精密機器'};
+  ['client','phone','from','to','weight','time','note'].forEach(k=>{const e=document.getElementById('fc-'+k);if(e&&r[k]){e.value=r[k];e.classList.add('filled');}});
+  document.getElementById('faxAiRes').style.display='block';
+  document.getElementById('faxAiRes').innerHTML='<div class="ai-ok">✅ AI読み取り完了</div>';
+  btn.innerHTML='<span>✅</span> 読み取り完了';
+}
+function clearFax(){
+  document.getElementById('fupz').style.display='';document.getElementById('fprev').style.display='none';
+  document.getElementById('faxAiBtn').className='ai-btn ai-off';document.getElementById('faxAiBtn').innerHTML='<span>✨</span> AIで自動読み取り';
+  document.getElementById('faxAiSt').style.display='none';document.getElementById('faxAiRes').style.display='none';
+  ['fc-client','fc-phone','fc-from','fc-to','fc-weight','fc-time'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.classList.remove('filled');}});
+  document.getElementById('ff').value='';
+}
+
+// ---- メール ----
+function sampleMail(){
+  document.getElementById('mailBody').value=`件名：配送のご依頼\n\nお世話になっております。神奈川物流センター 鈴木です。\n\n【集荷先】東京都港区芝浦2-3-4 倉庫棟B\n【配送先】埼玉県さいたま市大宮区桜木町2-1\n【荷物】電子部品一式（精密機器）\n【重量】約400kg\n【希望日時】4月28日（月）午前9時〜12時\n【特記事項】エレベーター不可・1階引き渡し希望\n\nよろしくお願いします。\nkanagawa-logi@example.jp`;
+}
+async function runMailAI(){
+  const body=document.getElementById('mailBody').value;
+  if(!body.trim()){toast('メール本文を入力してください');return;}
+  const btn=document.getElementById('mailAiBtn');btn.className='ai-btn ai-off';btn.innerHTML='<span>⏳</span> 解析中...';
+  const st=document.getElementById('mailAiSt');st.style.display='block';st.innerHTML='解析中...<div class="lbar"><div class="lfill" id="mfill" style="width:0%"></div></div>';
+  let p=0;const pi=setInterval(()=>{p=Math.min(p+10,90);const e=document.getElementById('mfill');if(e)e.style.width=p+'%';},200);
+  let ext={client:'神奈川物流センター 鈴木',email:'kanagawa-logi@example.jp',from:'東京都港区芝浦2-3-4',to:'埼玉県さいたま市大宮区桜木町2-1',weight:'約400kg（精密機器）',time:'4月28日09:00〜12:00',note:'エレベーター不可・1階引き渡し'};
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`メール本文から配送案件をJSON抽出（前後の説明・\`\`\`不要）。キー:client,email,from,to,weight,time,note\n${body}`}]})});
+    const data=await res.json();
+    ext=JSON.parse(data.content.map(i=>i.text||'').join('').replace(/```json|```/g,'').trim());
+  }catch(e){}
+  clearInterval(pi);st.style.display='none';
+  ['client','email','from','to','weight','time','note'].forEach(k=>{const e=document.getElementById('mc-'+k);if(e&&ext[k]){e.value=ext[k];e.classList.add('filled');}});
+  document.getElementById('mailAiRes').style.display='block';
+  document.getElementById('mailAiRes').innerHTML='<div class="ai-ok">✅ AI抽出完了</div>';
+  btn.innerHTML='<span>✅</span> 抽出完了';
+}
+function clearMail(){
+  document.getElementById('mailBody').value='';
+  document.getElementById('mailAiBtn').className='ai-btn ai-r';document.getElementById('mailAiBtn').innerHTML='<span>✨</span> AIで情報を自動抽出';
+  document.getElementById('mailAiSt').style.display='none';document.getElementById('mailAiRes').style.display='none';
+  ['mc-client','mc-email','mc-from','mc-to','mc-weight','mc-time','mc-note'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.classList.remove('filled');}});
+}
+function submitCase(ch){
+  const pre=ch==='fax'?'fc':'mc';
+  const c=document.getElementById(pre+'-client').value,f=document.getElementById(pre+'-from').value,t=document.getElementById(pre+'-to').value;
+  if(!c||!f||!t){toast('必須項目を入力してください');return;}
+  const nid='#R0'+(43+received.length);
+  received.push({id:nid,ch,client:c,from:f,to:t,weight:document.getElementById(pre+'-weight').value||'—',time:document.getElementById(pre+'-time').value||'—',note:''});
+  orders.push({id:'#'+(1021+orders.length-20),dest:t,weight:'—',time:'—',status:'waiting',vehicle:null,ch});
+  updateSB();toast('✅ 案件 '+nid+' を登録しました！');
+  if(ch==='fax')clearFax();else clearMail();
+}
+
+// ---- AI電話エージェント ----
+let agTos=[],agTimerInv=null,agSecs=0;
+let agAiWI=null,agClWI=null;
+// 波形
+const agAW=document.getElementById('agAiWave'),agCW=document.getElementById('agClWave');
+for(let i=0;i<16;i++){const b=document.createElement('div');b.className='wwb aiw';b.style.height='3px';agAW.appendChild(b);}
+for(let i=0;i<16;i++){const b=document.createElement('div');b.className='wwb clw';b.style.height='3px';agCW.appendChild(b);}
+function agAnim(who,on){
+  if(who==='ai'){clearInterval(agAiWI);agAiWI=on?setInterval(()=>document.querySelectorAll('#agAiWave .wwb').forEach(b=>{b.style.height=(Math.floor(Math.random()*16)+3)+'px';}),110):null;if(!on)document.querySelectorAll('#agAiWave .wwb').forEach(b=>b.style.height='3px');}
+  else{clearInterval(agClWI);agClWI=on?setInterval(()=>document.querySelectorAll('#agClWave .wwb').forEach(b=>{b.style.height=(Math.floor(Math.random()*14)+3)+'px';}),130):null;if(!on)document.querySelectorAll('#agClWave .wwb').forEach(b=>b.style.height='3px');}
+}
+function agSetStat(s){
+  const d=document.getElementById('ag-dot'),t=document.getElementById('ag-stat'),d2=document.getElementById('aiDot'),t2=document.getElementById('aiStatTxt');
+  const m={idle:{cls:'',txt:'待機中',ptxt:'AI待機中'},active:{cls:'on',txt:'応答中',ptxt:'AI応答中'},busy:{cls:'on',txt:'処理中',ptxt:'AI処理中'},transfer:{cls:'call',txt:'転送中',ptxt:'転送中'},outcall:{cls:'call',txt:'発信中',ptxt:'AI発信中'}};
+  const v=m[s]||m.idle;
+  d.className='ai-dot '+(v.cls||'');t.textContent=v.txt;
+  d2.className='ai-dot '+(v.cls||'');t2.textContent=v.ptxt;
+}
+function agMsg(who,text,delay){
+  return new Promise(r=>{
+    const t=setTimeout(()=>{
+      agAnim('ai',who==='ai');agAnim('caller',who!=='ai');
+      const log=document.getElementById('agLog');
+      const d=document.createElement('div');d.className='msg '+(who==='ai'?'ai':'caller');
+      d.innerHTML=`<div class="mw">${who==='ai'?'🤖 AI':'👤 相手'}</div>${text}`;
+      log.appendChild(d);log.scrollTop=log.scrollHeight;
+      setTimeout(()=>{agAnim('ai',false);agAnim('caller',false);},1100);r();
+    },delay);agTos.push(t);
+  });
+}
+function agSetExt(data,delay){agTos.push(setTimeout(()=>{Object.entries(data).forEach(([k,v])=>{const e=document.getElementById('xe-'+k);if(e){e.textContent=v;e.classList.remove('em');}});},delay));}
+function agSetJudge(type,reasons,summary,delay){
+  agTos.push(setTimeout(()=>{
+    const jr=document.getElementById('ag-jr');
+    const m={auto:{cls:'jr-auto',txt:'✅ AI完結 — 自動登録します'},transfer:{cls:'jr-tr',txt:'⚡ 配車マンへ転送'},outcall:{cls:'jr-oc',txt:'📞 自動発信を実行'}};
+    jr.className='jr '+(m[type]?.cls||'');jr.textContent=m[type]?.txt||'';
+    const rl=document.getElementById('ag-rl');rl.innerHTML='';
+    reasons.forEach(r=>rl.innerHTML+=`<div class="ri"><div class="rid"></div>${r}</div>`);
+    if(summary){document.getElementById('ag-sumcard').style.display='block';document.getElementById('ag-sum').textContent=summary;}
+  },delay));
+}
+function agEnableActs(end,tr,reg,delay){
+  agTos.push(setTimeout(()=>{
+    document.getElementById('ag-bend').disabled=!end;
+    document.getElementById('ag-btr').disabled=!tr;
+    document.getElementById('ag-breg').disabled=!reg;
+  },delay));
+}
+function agStartTimer(){agSecs=0;clearInterval(agTimerInv);document.getElementById('ag-timer').classList.add('rec');agTimerInv=setInterval(()=>{agSecs++;const m=String(Math.floor(agSecs/60)).padStart(2,'0'),s=String(agSecs%60).padStart(2,'0');document.getElementById('ag-timer').textContent=m+':'+s;},1000);}
+function agStopTimer(){clearInterval(agTimerInv);document.getElementById('ag-timer').classList.remove('rec');}
+function agClearExt(){['client','phone','from','to','weight','time'].forEach(k=>{const e=document.getElementById('xe-'+k);if(e){e.textContent='—';e.classList.add('em');}});}
+
+const scenarios={
+  neworder:{caller:{name:'山田商事 山田様',tel:'03-1234-5678',avatar:'山',type:'🏢 荷主'},title:'📦 新規配送依頼',sub:'情報収集→AI自動登録',
+    run:async()=>{
+      agSetStat('active');agStartTimer();
+      await agMsg('ai','はい、〇〇運送でございます。ご用件をお聞かせください。',300);
+      await agMsg('caller','山田商事の山田です。荷物の配送をお願いしたいんですが。',1900);
+      agSetExt({client:'山田商事 山田様',phone:'03-1234-5678'},2000);
+      await agMsg('ai','ありがとうございます。集荷先の住所をお聞かせください。',3100);
+      await agMsg('caller','東京都中央区銀座3丁目です。',4800);
+      agSetExt({client:'山田商事 山田様',phone:'03-1234-5678',from:'東京都中央区銀座3丁目'},5000);
+      await agMsg('ai','配送先はいかがでしょうか？',6200);
+      await agMsg('caller','神奈川県横浜市西区みなとみらいです。',7800);
+      await agMsg('ai','重量と希望日時もお聞かせください。',9000);
+      await agMsg('caller','200キロくらいで、来週月曜の午前中にお願いしたいです。',11000);
+      agSetExt({client:'山田商事 山田様',phone:'03-1234-5678',from:'東京都中央区銀座3丁目',to:'神奈川県横浜市西区みなとみらい',weight:'約200kg',time:'来週月曜 午前中'},11200);
+      agSetStat('busy');
+      await agMsg('ai','ありがとうございます。来週月曜午前中、銀座→横浜みなとみらい、200kgで承りました。確認番号は#R044となります。',13000);
+      agSetJudge('auto',['必要情報が全て揃っている','定型的な配送依頼','特殊条件なし','自動登録可能'],null,13500);
+      agEnableActs(true,false,true,13500);agSetStat('idle');
+    }
+  },
+  confirm:{caller:{name:'田中製作所 田中様',tel:'045-678-9012',avatar:'田',type:'🏭 荷主（自動発信）'},title:'✅ 配送完了確認コール',sub:'AI自動発信→完了確認',
+    run:async()=>{
+      agSetStat('outcall');agStartTimer();swItab('oc',document.querySelector('.itab:nth-child(3)'));
+      document.getElementById('ag-oclist').innerHTML=`<div class="occard"><div class="och"><span class="oct">📦 配送完了確認</span><span class="ocs ocs-c">発信中</span></div><div class="oci">案件#R041・田中製作所様<br>配送完了後15分→AI自動発信</div></div>`;
+      await agMsg('ai','こちら〇〇運送のAIです。先ほどの配送はお受け取りいただけましたでしょうか？',500);
+      await agMsg('caller','はい、さきほど受け取りました。ありがとうございます。',2300);
+      await agMsg('ai','ありがとうございます。問題はございませんでしたでしょうか？',3600);
+      await agMsg('caller','特に問題なかったです。',5000);
+      await agMsg('ai','承知しました。またのご利用をお待ちしております。失礼いたします。',6200);
+      agSetJudge('outcall',['配送完了後の自動確認コール','受取確認が取れた','問題なし→案件クローズ'],'田中製作所様より配送完了の確認が取れました。問題なし。案件クローズ。',7000);
+      agEnableActs(true,false,false,7000);
+      agTos.push(setTimeout(()=>{agSetStat('idle');document.querySelector('#ag-oclist .ocs').textContent='完了';document.querySelector('#ag-oclist .ocs').className='ocs ocs-d';},7500));
+    }
+  },
+  driver:{caller:{name:'高橋ドライバー（軽バンC）',tel:'090-1234-5678',avatar:'高',type:'🚚 ドライバー'},title:'🚚 ドライバー到着確認',sub:'予定超過→AI自動発信',
+    run:async()=>{
+      agSetStat('outcall');agStartTimer();swItab('oc',document.querySelector('.itab:nth-child(3)'));
+      document.getElementById('ag-oclist').innerHTML=`<div class="occard"><div class="och"><span class="oct">🚚 ドライバー到着確認</span><span class="ocs ocs-c">発信中</span></div><div class="oci">軽バンC 高橋ドライバー<br>豊洲配送 — 予定+30分超過<br>GPS: 江東区付近</div></div>`;
+      await agMsg('ai','高橋さん、〇〇運送のAIです。豊洲の配送、予定より30分超過していますがいかがでしょうか？',500);
+      await agMsg('caller','渋滞がひどくて。あと15分くらいで着けます。',2600);
+      await agMsg('ai','承知しました。配送先様へ遅延のご連絡は必要でしょうか？',4000);
+      await agMsg('caller','お願いできれば助かります。',5500);
+      await agMsg('ai','かしこまりました。配送先様へAIから自動でご連絡いたします。お気をつけて。',6800);
+      agSetJudge('outcall',['ドライバーより15分以内の到着見込み','配送先への遅延連絡が必要','AI自動対応で完結可能'],'高橋ドライバーより渋滞による約15分遅延の報告。配送先（豊洲）へ自動遅延連絡を実施予定。',7500);
+      agEnableActs(true,false,false,7500);agSetStat('idle');
+    }
+  },
+  schedule:{caller:{name:'受取人 佐藤様',tel:'090-9876-5432',avatar:'佐',type:'📦 配送先・受取人'},title:'📅 日程調整（受取人）',sub:'受取人の都合を確認→AI完結',
+    run:async()=>{
+      agSetStat('outcall');agStartTimer();
+      await agMsg('ai','こちら〇〇運送のAIです。4月28日の配送についてご確認のご連絡です。午前9時から12時のお受け取りはご都合よろしいでしょうか？',500);
+      await agMsg('caller','あ、その日は午前中は外出予定で…。午後なら大丈夫なんですが。',2500);
+      await agMsg('ai','承知しました。午後のお受け取り希望ですね。14時から17時のご都合はいかがでしょうか？',4000);
+      await agMsg('caller','14時から17時なら大丈夫です。',5600);
+      await agMsg('ai','ありがとうございます。4月28日14時から17時でご予約を承りました。担当者より改めてご連絡いたします。',7000);
+      agSetExt({client:'受取人 佐藤様',phone:'090-9876-5432',time:'4月28日 14:00〜17:00（変更）'},7200);
+      agSetJudge('auto',['受取人の都合確認→変更完了','時間帯の変更はAI完結可能','スケジュール更新を登録'],'受取人佐藤様の都合により配送時間を14:00〜17:00に変更。案件スケジュールを更新。',8000);
+      agEnableActs(true,false,true,8000);agSetStat('idle');
+    }
+  },
+  reschedule:{caller:{name:'神奈川物流 鈴木様',tel:'045-234-5678',avatar:'鈴',type:'🏢 荷主'},title:'🔄 日程変更依頼',sub:'複雑案件→配車マン転送',
+    run:async()=>{
+      agSetStat('active');agStartTimer();
+      await agMsg('ai','はい、〇〇運送でございます。',300);
+      await agMsg('caller','神奈川物流の鈴木です。来週月曜の配送なんですが、急遽日程を変えてもらいたくて。',1800);
+      agSetExt({client:'神奈川物流 鈴木様',phone:'045-234-5678'},2000);
+      await agMsg('ai','承知しました。どのような変更をご希望でしょうか？',3200);
+      await agMsg('caller','月曜から木曜に変えてほしいんですが、荷物の量も200キロから350キロに増えて、配送先も一部変更があって…',5000);
+      agSetStat('busy');
+      await agMsg('ai','ありがとうございます。日程・数量・配送先の3点変更ですね。担当者に引き継ぐことでより正確に対応できます。少々お待ちください。',7500);
+      agSetExt({client:'神奈川物流 鈴木様',phone:'045-234-5678',weight:'変更あり（200→350kg）',time:'月曜→木曜 変更希望'},8000);
+      agSetJudge('transfer',['日程・数量・配送先の複数変更','既存案件との調整が必要','車両変更の可能性あり','AI完結は困難と判断'],'神奈川物流鈴木様より日程（月→木）・重量（200→350kg）・配送先の変更依頼。既存スケジュール調整が必要。即転送。',8500);
+      agEnableActs(true,true,false,8500);agSetStat('transfer');
+    }
+  },
+  complaint:{caller:{name:'不明（着信）',tel:'03-9999-xxxx',avatar:'！',type:'⚠️ 緊急・クレーム'},title:'⚠️ クレーム・緊急対応',sub:'即時転送→配車マンへ',
+    run:async()=>{
+      agSetStat('active');agStartTimer();
+      await agMsg('ai','はい、〇〇運送でございます。',300);
+      await agMsg('caller','おい！荷物がまだ届いてないぞ！2時間も待ってるんだ！どうなってるんだ！',1500);
+      agSetStat('busy');
+      await agMsg('ai','大変申し訳ございません。ただいま状況を確認し、担当者がすぐにご連絡いたします。お電話番号をお聞かせいただけますか？',3000);
+      await agMsg('caller','03-9999-1234だ。早くしてくれ！',4600);
+      agSetExt({phone:'03-9999-1234'},4800);
+      await agMsg('ai','承知しました。緊急で担当者へ転送いたします。そのままお待ちください。',5800);
+      agSetJudge('transfer',['クレーム・高感情反応→人間対応が必須','2時間の配送遅延は緊急性が高い','即時転送で最優先対応'],'配送遅延クレーム（2時間待ち）。感情的対応と謝罪が必要。ドライバー状況確認を要する。即時転送。',6200);
+      agEnableActs(false,true,false,6200);agSetStat('transfer');
+    }
+  }
+};
+
+function loadSc(key,el){
+  agTos.forEach(t=>clearTimeout(t));agTos=[];
+  agStopTimer();agSetStat('idle');agAnim('ai',false);agAnim('caller',false);
+  document.querySelectorAll('.scbtn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const s=scenarios[key];
+  document.getElementById('ag-rht').textContent=s.title;
+  document.getElementById('ag-rhs').textContent=s.sub;
+  document.getElementById('ag-avatar').textContent=s.caller.avatar;
+  document.getElementById('ag-name').textContent=s.caller.name;
+  document.getElementById('ag-tel').textContent=s.caller.tel;
+  document.getElementById('ag-type').textContent=s.caller.type;
+  document.getElementById('ag-timer').textContent='--:--';
+  document.getElementById('agLog').innerHTML='';
+  agClearExt();
+  document.getElementById('ag-jr').className='jr';document.getElementById('ag-jr').style.background='var(--color-background-secondary)';document.getElementById('ag-jr').style.color='var(--color-text-secondary)';document.getElementById('ag-jr').textContent='判断待ち';
+  document.getElementById('ag-rl').innerHTML='<div class="ri"><div class="rid"></div>会話内容を分析中...</div>';
+  document.getElementById('ag-sumcard').style.display='none';
+  document.getElementById('ag-oclist').innerHTML='<div style="text-align:center;font-size:10px;color:var(--color-text-secondary);padding:14px 0">このシナリオは自動発信なし</div>';
+  agEnableActs(false,false,false,0);
+  swItab('ext',document.querySelector('.itab'));
+  s.run();
+}
+function swItab(n,el){
+  document.querySelectorAll('.itab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.querySelectorAll('.itc').forEach(t=>t.classList.remove('active'));
+  document.getElementById('itc-'+n).classList.add('active');
+}
+function agTransfer(){toast('⚡ 配車マンへ転送しました — 通話ログと要約を送信');agSetStat('idle');agStopTimer();agEnableActs(false,false,false,0);}
+function agRegister(){
+  toast('✅ 案件を配車一覧に登録しました！');agSetStat('idle');agStopTimer();agEnableActs(false,false,false,0);
+  received.push({id:'#R0'+(43+received.length),ch:'ai',client:document.getElementById('xe-client').textContent||'AI受付',from:document.getElementById('xe-from').textContent||'—',to:document.getElementById('xe-to').textContent||'—',weight:document.getElementById('xe-weight').textContent||'—',time:document.getElementById('xe-time').textContent||'—',note:''});
+  orders.push({id:'#'+(1021+orders.length-20),dest:document.getElementById('xe-to').textContent||'—',weight:'—',time:'—',status:'waiting',vehicle:null,ch:'ai'});
+  updateSB();document.getElementById('ag-today').textContent=(29)+'件';
+}
+function agEnd(){toast('📵 通話を終了しました');agTos.forEach(t=>clearTimeout(t));agTos=[];agStopTimer();agSetStat('idle');agAnim('ai',false);agAnim('caller',false);agEnableActs(false,false,false,0);document.getElementById('ag-rht').textContent='シナリオを選択してください';document.getElementById('ag-rhs').textContent='左のボタンをクリックしてデモ開始';document.getElementById('agLog').innerHTML='<div style="text-align:center;font-size:10px;color:var(--color-text-secondary);padding:16px 0">シナリオを選ぶと会話が流れます</div>';}
+
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
+function sl(ms){return new Promise(r=>setTimeout(r,ms));}
+</script>
